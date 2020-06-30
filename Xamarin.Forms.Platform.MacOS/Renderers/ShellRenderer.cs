@@ -41,6 +41,20 @@ namespace Xamarin.Forms.Platform.MacOS
 
 		protected virtual IShellTabBarAppearanceTracker CreateShellTabBarAppearanceTracker() => throw new NotImplementedException();
 
+		protected virtual void OnCurrentItemChanged() => throw new NotImplementedException();
+
+		protected virtual void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e) => throw new NotImplementedException();
+
+		protected virtual void OnElementSet(Shell element) => throw new NotImplementedException();
+
+		protected async void SetCurrentShellItemController(IShellItemRenderer value) => await System.Threading.Tasks.Task.Factory.StartNew(() => { });
+
+		protected virtual void UpdateBackgroundColor() => throw new NotImplementedException();
+
+		void UpdateFlowDirection(bool readdViews = false) => throw new NotImplementedException();
+
+		void SetupCurrentShellItem() => throw new NotImplementedException();
+
 		#region IShellContext
 
 		bool IShellContext.AllowFlyoutGesture => throw new NotImplementedException();
