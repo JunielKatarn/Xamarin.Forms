@@ -317,6 +317,8 @@
     <Compile Include="Renderers\IShellNavBarAppearanceTracker.cs" />
     <Compile Include="Renderers\IShellTabBarAppearanceTracker.cs" />
     <Compile Include="Renderers\IShellSearchResultsRenderer.cs" />
+    <Compile Include="Renderers\IShellFlyoutRenderer.cs" />
+    <Compile Include="Renderers\IShellItemTransition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xamarin.Forms.Platform\Xamarin.Forms.Platform.csproj">

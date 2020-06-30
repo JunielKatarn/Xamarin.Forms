@@ -11,6 +11,36 @@ namespace Xamarin.Forms.Platform.MacOS
 		{
 		}
 
+		IShellItemRenderer _currentShellItemRenderer;
+		bool _disposed;
+		IShellFlyoutRenderer _flyoutRenderer;
+
+		IShellFlyoutRenderer FlyoutRenderer => throw new NotImplementedException();
+
+		public event EventHandler<VisualElementChangedEventArgs> ElementChanged;
+		public VisualElement Element { get; private set; }
+		public NSView NativeView => FlyoutRenderer.View;
+		public Shell Shell => Element as Shell;
+		public NSViewController ViewController => FlyoutRenderer.ViewController;
+
+		protected virtual IShellFlyoutRenderer CreateFlyoutRenderer() => throw new NotImplementedException();
+
+		protected virtual IShellNavBarAppearanceTracker CreateShellNavBarAppearanceTracker => throw new NotImplementedException();
+
+		protected virtual IShellPageRendererTracker CreateShellPageRendererTracker() => throw new NotImplementedException();
+
+		protected virtual IShellFlyoutContentRenderer CreateShellFlyoutContentRenderer => throw new NotImplementedException();
+
+		protected virtual IShellItemRenderer CreateShellItemRenderer(ShellItem item) => throw new NotImplementedException();
+
+		protected virtual IShellItemTransition CreateShellItemTransition() => throw new NotImplementedException();
+
+		protected virtual IShellSearchResultsRenderer CreateShellSearchResultsRenderer() => throw new NotImplementedException();
+
+		protected virtual IShellSectionRenderer CreateShellSectionRenderer(ShellSection shellSection) => throw new NotImplementedException();
+
+		protected virtual IShellTabBarAppearanceTracker CreateShellTabBarAppearanceTracker() => throw new NotImplementedException();
+
 		#region IShellContext
 
 		bool IShellContext.AllowFlyoutGesture => throw new NotImplementedException();
