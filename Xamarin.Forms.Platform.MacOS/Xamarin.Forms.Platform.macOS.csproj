@@ -308,6 +308,15 @@
     <Compile Include="..\Xamarin.Forms.Platform.iOS\Shapes\ShapeRenderer.cs">
       <Link>Shapes\ShapeRenderer.cs</Link>
     </Compile>
+    <Compile Include="Renderers\ShellRenderer.cs" />
+    <Compile Include="Renderers\IShellContext.cs" />
+    <Compile Include="Renderers\IShellItemRenderer.cs" />
+    <Compile Include="Renderers\IShellPageRendererTracker.cs" />
+    <Compile Include="Renderers\IShellFlyoutContentRenderer.cs" />
+    <Compile Include="Renderers\IShellSectionRenderer.cs" />
+    <Compile Include="Renderers\IShellNavBarAppearanceTracker.cs" />
+    <Compile Include="Renderers\IShellTabBarAppearanceTracker.cs" />
+    <Compile Include="Renderers\IShellSearchResultsRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xamarin.Forms.Platform\Xamarin.Forms.Platform.csproj">
