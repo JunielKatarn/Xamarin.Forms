@@ -15,7 +15,23 @@ namespace Xamarin.Forms.Platform.MacOS
 		bool _disposed;
 		IShellFlyoutRenderer _flyoutRenderer;
 
-		IShellFlyoutRenderer FlyoutRenderer => throw new NotImplementedException();
+		IShellFlyoutRenderer FlyoutRenderer
+		{
+			get
+			{
+				if (_flyoutRenderer == null)
+				{
+					FlyoutRenderer = CreateFlyoutRenderer();
+					FlyoutRenderer.AttachFlyout(this, this);
+				}
+				return _flyoutRenderer;
+			}
+
+			set
+			{
+				_flyoutRenderer = value;
+			}
+		}
 
 		public event EventHandler<VisualElementChangedEventArgs> ElementChanged;
 		public VisualElement Element { get; private set; }
@@ -23,7 +39,16 @@ namespace Xamarin.Forms.Platform.MacOS
 		public Shell Shell => Element as Shell;
 		public NSViewController ViewController => FlyoutRenderer.ViewController;
 
-		protected virtual IShellFlyoutRenderer CreateFlyoutRenderer() => throw new NotImplementedException();
+		protected virtual IShellFlyoutRenderer CreateFlyoutRenderer()
+		{
+			// HACK
+			if (NSApplication.SharedApplication?.Delegate?.GetType()?.FullName == "XamarinFormsPreviewer.macOS.AppDelegate")
+			{
+				return new DesignerFlyoutRenderer(this);
+			}
+
+			return null;//TODO
+		}
 
 		protected virtual IShellNavBarAppearanceTracker CreateShellNavBarAppearanceTracker => throw new NotImplementedException();
 
@@ -142,5 +167,29 @@ namespace Xamarin.Forms.Platform.MacOS
 		}
 
 		#endregion NSViewController
+
+		// this won't work on the previewer if it's private
+		internal class DesignerFlyoutRenderer : IShellFlyoutRenderer
+		{
+			readonly NSViewController _parent;
+
+			public DesignerFlyoutRenderer(NSViewController parent)
+			{
+				_parent = parent;
+			}
+
+			public NSViewController ViewController => _parent;
+
+			public NSView View => _parent.View;
+
+			public void AttachFlyout(IShellContext context, NSViewController content)
+			{
+			}
+
+			public void Dispose()
+			{
+
+			}
+		}
 	}
 }

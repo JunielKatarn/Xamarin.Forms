@@ -319,6 +319,8 @@
     <Compile Include="Renderers\IShellSearchResultsRenderer.cs" />
     <Compile Include="Renderers\IShellFlyoutRenderer.cs" />
     <Compile Include="Renderers\IShellItemTransition.cs" />
+    <Compile Include="Renderers\ShellFlyoutRenderer.cs" />
+    <Compile Include="Renderers\IShellFlyoutTransition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xamarin.Forms.Platform\Xamarin.Forms.Platform.csproj">
