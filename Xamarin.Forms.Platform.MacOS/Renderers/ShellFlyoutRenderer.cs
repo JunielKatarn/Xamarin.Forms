@@ -336,20 +336,62 @@ namespace Xamarin.Forms.Platform.MacOS
 
 		void IAppearanceObserver.OnAppearanceChanged(ShellAppearance appearance)
 		{
-			throw new NotImplementedException();
+			_backdropColor = Color.Default;
+
+			UpdateTapoffViewBackgroundColor();
 		}
 
 		#endregion IAppearanceObserver
 
 		#region IShellFlyoutRenderer
 
-		NSViewController IShellFlyoutRenderer.ViewController => throw new NotImplementedException();
+		NSViewController IShellFlyoutRenderer.ViewController => this;
 
-		NSView IShellFlyoutRenderer.View => throw new NotImplementedException();
+		NSView IShellFlyoutRenderer.View => View;
 
 		void IShellFlyoutRenderer.AttachFlyout(IShellContext context, NSViewController content)
 		{
-			throw new NotImplementedException();
+			Context = context;
+			Shell = Context.Shell;
+			Detail = content;
+
+			Shell.PropertyChanged += OnShellPropertyChanged;
+
+			PanGestureRecognizer = new NSPanGestureRecognizer(HandlePanGesture);
+			PanGestureRecognizer.ShouldRecognizeSimultaneously += (a, b) =>
+			{
+				// This handles tapping outside the open flyout
+				if (a is NSPanGestureRecognizer pr && pr.State == NSGestureRecognizerState.Failed &&
+					/*b is UITapGestureRecognizer*/ b.State == NSGestureRecognizerState.Ended && IsOpen)
+				{
+					IsOpen = false;
+					LayoutSidebar(true);
+				}
+
+				return false;
+			};
+
+			PanGestureRecognizer.ShouldReceiveTouch += (sender, touch) =>
+			{
+				if (!context.AllowFlyoutGesture || _flyoutBehavior != FlyoutBehavior.Flyout)
+					return false;
+				var view = View;
+				CGPoint loc = touch.GetLocation(View);
+				if (View is NSSlider ||
+					//View is MPVolumeView
+					(loc.X > view.Frame.Width * 0.1 && !IsOpen))
+					return false;
+
+				return true;
+			};
+
+			ShellController.AddAppearanceObserver(this, Shell);
+		}
+
+		// macOS does not have swipe view, does it?
+		bool IsSwipeView(NSView view)
+		{
+			return false;
 		}
 
 		#endregion IShellFlyoutRenderer
@@ -358,7 +400,12 @@ namespace Xamarin.Forms.Platform.MacOS
 
 		void IFlyoutBehaviorObserver.OnFlyoutBehaviorChanged(FlyoutBehavior behavior)
 		{
-			throw new NotImplementedException();
+			_flyoutBehavior = behavior;
+			if (behavior == FlyoutBehavior.Locked)
+				IsOpen = true;
+			else if (behavior == FlyoutBehavior.Disabled)
+				IsOpen = false;
+			LayoutSidebar(false);
 		}
 
 		#endregion IFlyoutBehaviorObserver
