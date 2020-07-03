@@ -321,6 +321,10 @@
     <Compile Include="Renderers\IShellItemTransition.cs" />
     <Compile Include="Renderers\ShellFlyoutRenderer.cs" />
     <Compile Include="Renderers\IShellFlyoutTransition.cs" />
+    <Compile Include="Renderers\SlideFlyoutTransition.cs" />
+    <Compile Include="Renderers\SafeShellNavBarAppearanceTracker.cs" />
+    <Compile Include="Renderers\ShellNavBarAppearanceTracker.cs" />
+    <Compile Include="Renderers\ShellPageRendererTracker.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xamarin.Forms.Platform\Xamarin.Forms.Platform.csproj">

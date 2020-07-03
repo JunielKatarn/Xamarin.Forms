@@ -47,7 +47,10 @@ namespace Xamarin.Forms.Platform.MacOS
 				return new DesignerFlyoutRenderer(this);
 			}
 
-			return null;//TODO
+			return new ShellFlyoutRenderer()
+			{
+				FlyoutTransition = new SlideFlyoutTransition()
+			};
 		}
 
 		protected virtual IShellNavBarAppearanceTracker CreateShellNavBarAppearanceTracker => throw new NotImplementedException();
