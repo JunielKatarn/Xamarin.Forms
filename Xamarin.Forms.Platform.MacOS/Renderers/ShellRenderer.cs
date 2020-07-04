@@ -53,11 +53,20 @@ namespace Xamarin.Forms.Platform.MacOS
 			};
 		}
 
-		protected virtual IShellNavBarAppearanceTracker CreateShellNavBarAppearanceTracker => throw new NotImplementedException();
+		protected virtual IShellNavBarAppearanceTracker CreateNavBarAppearanceTracker()
+		{
+			return new ShellNavBarAppearanceTracker();//TODO? SafeShell...
+		}
 
-		protected virtual IShellPageRendererTracker CreateShellPageRendererTracker() => throw new NotImplementedException();
+		protected virtual IShellPageRendererTracker CreatePageRendererTracker()
+		{
+			return new ShellPageRendererTracker(this);
+		}
 
-		protected virtual IShellFlyoutContentRenderer CreateShellFlyoutContentRenderer => throw new NotImplementedException();
+		protected virtual IShellFlyoutContentRenderer CreateShellFlyoutContentRenderer()
+		{
+			return new ShellFlyoutContentRenderer(this);
+		}
 
 		protected virtual IShellItemRenderer CreateShellItemRenderer(ShellItem item) => throw new NotImplementedException();
 
