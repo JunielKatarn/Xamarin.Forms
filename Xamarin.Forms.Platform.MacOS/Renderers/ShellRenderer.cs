@@ -68,14 +68,30 @@ namespace Xamarin.Forms.Platform.MacOS
 			return new ShellFlyoutContentRenderer(this);
 		}
 
-		protected virtual IShellItemRenderer CreateShellItemRenderer(ShellItem item) => throw new NotImplementedException();
+		protected virtual IShellItemRenderer CreateShellItemRenderer(ShellItem item)
+		{
+			return new ShellItemRenderer(this)
+			{
+				ShellItem = item
+			};
+		}
 
-		protected virtual IShellItemTransition CreateShellItemTransition() => throw new NotImplementedException();
+		protected virtual IShellItemTransition CreateShellItemTransition()
+		{
+			return new ShellItemTransition();
+		}
 
-		protected virtual IShellSearchResultsRenderer CreateShellSearchResultsRenderer() => throw new NotImplementedException();
+		protected virtual IShellSearchResultsRenderer CreateShellSearchResultsRenderer()
+		{
+			return new ShellSearchResultsRenderer(this);
+		}
 
-		protected virtual IShellSectionRenderer CreateShellSectionRenderer(ShellSection shellSection) => throw new NotImplementedException();
+		protected virtual IShellSectionRenderer CreateShellSectionRenderer(ShellSection shellSection)
+		{
+			return new ShellSectionRenderer(this);
+		}
 
+		//TODO
 		protected virtual IShellTabBarAppearanceTracker CreateShellTabBarAppearanceTracker() => throw new NotImplementedException();
 
 		protected virtual void OnCurrentItemChanged() => throw new NotImplementedException();

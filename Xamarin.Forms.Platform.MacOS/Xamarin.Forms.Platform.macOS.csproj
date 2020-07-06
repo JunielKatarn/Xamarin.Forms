@@ -329,6 +329,13 @@
     <Compile Include="Renderers\NSContainerView.cs" />
     <Compile Include="PropertyChangedEventArgsExtensions.cs" />
     <Compile Include="Renderers\ShellItemRenderer.cs" />
+    <Compile Include="Renderers\ShellItemTransition.cs" />
+    <Compile Include="Renderers\ShellSearchResultsRenderer.cs" />
+    <Compile Include="Renderers\ShellSectionRenderer.cs" />
+    <Compile Include="Renderers\IShellSectionRootRenderer.cs" />
+    <Compile Include="Renderers\ShellSectionRootRenderer.cs" />
+    <Compile Include="Renderers\IShellSectionRootHeader.cs" />
+    <Compile Include="Renderers\ShellSectionRootHeader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xamarin.Forms.Platform\Xamarin.Forms.Platform.csproj">
