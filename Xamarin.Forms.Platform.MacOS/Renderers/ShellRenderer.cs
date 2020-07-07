@@ -91,8 +91,10 @@ namespace Xamarin.Forms.Platform.MacOS
 			return new ShellSectionRenderer(this);
 		}
 
-		//TODO
-		protected virtual IShellTabBarAppearanceTracker CreateShellTabBarAppearanceTracker() => throw new NotImplementedException();
+		protected virtual IShellTabBarAppearanceTracker CreateTabBarAppearanceTracker()
+		{
+			return new ShellTabBarAppearanceTracker();
+		}
 
 		protected virtual void OnCurrentItemChanged() => throw new NotImplementedException();
 

@@ -336,6 +336,8 @@
     <Compile Include="Renderers\ShellSectionRootRenderer.cs" />
     <Compile Include="Renderers\IShellSectionRootHeader.cs" />
     <Compile Include="Renderers\ShellSectionRootHeader.cs" />
+    <Compile Include="Renderers\ShellTabBarAppearanceTracker.cs" />
+    <Compile Include="Renderers\SafeShellTabBarAppearanceTracker.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xamarin.Forms.Platform\Xamarin.Forms.Platform.csproj">
