@@ -6,11 +6,11 @@ namespace Xamarin.Forms.Platform.MacOS
 {
 	public class ShellNavBarAppearanceTracker : IShellNavBarAppearanceTracker
 	{
-		CGColor _defaultBarTint; // Using CoreGraphics.CGColor instead of UIKit.UIColor
-		CGColor _defaultTint;
-		NSStringAttributes _defaultTitleAttributes;
-		float _shadowopacity = float.MinValue;
-		CGColor _shadowColor;
+		//CGColor _defaultBarTint; // Using CoreGraphics.CGColor instead of UIKit.UIColor
+		CGColor _defaultTint = new CGColor(0, 255, 0);
+		//NSStringAttributes _defaultTitleAttributes;
+		//float _shadowopacity = float.MinValue;
+		//CGColor _shadowColor;
 
 		// Using NSViewController due to the lack of "NSNavigationController"
 		public void UpdateLayout(NSViewController controller)
@@ -28,9 +28,9 @@ namespace Xamarin.Forms.Platform.MacOS
 
 		public void SetAppearance(NSViewController controller, ShellAppearance appearance)
 		{
-			var background = appearance.BackgroundColor;
-			var foreground = appearance.ForegroundColor;
-			var titleColor = appearance.TitleColor;
+			//var background = appearance.BackgroundColor;
+			//var foreground = appearance.ForegroundColor;
+			//var titleColor = appearance.TitleColor;
 
 			// No nav bar on macOS?
 		}

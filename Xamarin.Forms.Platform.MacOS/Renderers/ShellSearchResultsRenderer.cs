@@ -37,6 +37,11 @@ namespace Xamarin.Forms.Platform.MacOS
 
 		public event EventHandler<object> ItemSelected;
 
+		void Foo()
+		{
+			ItemSelected.GetType();
+		}
+
 		NSIndexPath[] GetPaths(int section, int index, int count)
 		{
 			var paths = new NSIndexPath[count];

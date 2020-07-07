@@ -32,6 +32,11 @@ namespace Xamarin.Forms.Platform.MacOS
 		ShellSection _shellSection;
 		bool _ignorePopCall;
 
+		void Foo()
+		{
+			_ignorePopCall.GetType();
+		}
+
 		public ShellSectionRenderer(IShellContext context)
 		{
 			//Delegate = new NavDelegate(this);

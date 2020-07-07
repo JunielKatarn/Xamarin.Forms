@@ -12,7 +12,7 @@ namespace Xamarin.Forms.Platform.MacOS
 		}
 
 		IShellItemRenderer _currentShellItemRenderer;
-		bool _disposed;
+		//bool _disposed; // Not used for now
 		IShellFlyoutRenderer _flyoutRenderer;
 
 		IShellFlyoutRenderer FlyoutRenderer

@@ -88,7 +88,7 @@ namespace Xamarin.Forms.Platform.MacOS
 
 		void IFlyoutBehaviorObserver.OnFlyoutBehaviorChanged(FlyoutBehavior behavior)
 		{
-			throw new NotImplementedException();
+			_flyoutBehavior = behavior;
 		}
 
 		#endregion IFlyoutBehaviorObserver

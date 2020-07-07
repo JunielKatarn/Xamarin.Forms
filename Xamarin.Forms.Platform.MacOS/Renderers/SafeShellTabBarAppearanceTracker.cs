@@ -8,7 +8,7 @@ namespace Xamarin.Forms.Platform.MacOS
 	public class SafeShellTabBarAppearanceTracker : IShellTabBarAppearanceTracker
 	{
 		//NSColor _defaultBarTint;
-		NSColor _defaultTint;
+		NSColor _defaultTint = NSColor.Green;
 		//NSColor _defaultUnselectedTint;
 
 		#region IShellTabBarAppearanceTracker
