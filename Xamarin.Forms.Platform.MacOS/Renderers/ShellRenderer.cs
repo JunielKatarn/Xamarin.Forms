@@ -33,11 +33,11 @@ namespace Xamarin.Forms.Platform.MacOS
 			}
 		}
 
-		public event EventHandler<VisualElementChangedEventArgs> ElementChanged;
-		public VisualElement Element { get; private set; }
-		public NSView NativeView => FlyoutRenderer.View;
+		//public event EventHandler<VisualElementChangedEventArgs> ElementChanged;
+		//public VisualElement Element { get; private set; }
+		//public NSView NativeView => FlyoutRenderer.View;
 		public Shell Shell => Element as Shell;
-		public NSViewController ViewController => FlyoutRenderer.ViewController;
+		//public NSViewController ViewController => FlyoutRenderer.ViewController;
 
 		protected virtual IShellFlyoutRenderer CreateFlyoutRenderer()
 		{
@@ -96,76 +96,172 @@ namespace Xamarin.Forms.Platform.MacOS
 			return new ShellTabBarAppearanceTracker();
 		}
 
-		protected virtual void OnCurrentItemChanged() => throw new NotImplementedException();
+		protected virtual void OnCurrentItemChanged()
+		{
+			var currentItem = Shell.CurrentItem;
+			if (_currentShellItemRenderer?.ShellItem != currentItem)
+			{
+				var newController = CreateShellItemRenderer(currentItem);
+				SetCurrentShellItemController(newController);
+			}
+		}
 
-		protected virtual void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e) => throw new NotImplementedException();
+		protected virtual void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == Shell.CurrentItemProperty.PropertyName)
+			{
+				OnCurrentItemChanged();
+				UpdateFlowDirection();
+			}
+			else if(e.PropertyName == VisualElement.FlowDirectionProperty.PropertyName)
+			{
+				UpdateFlowDirection(true);
+			}
+		}
 
-		protected virtual void OnElementSet(Shell element) => throw new NotImplementedException();
+		protected virtual void OnElementSet(Shell element)
+		{
+			if (element == null)
+				return;
 
-		protected async void SetCurrentShellItemController(IShellItemRenderer value) => await System.Threading.Tasks.Task.Factory.StartNew(() => { });
+			element.PropertyChanged += OnElementPropertyChanged;
+		}
 
-		protected virtual void UpdateBackgroundColor() => throw new NotImplementedException();
+		protected async void SetCurrentShellItemController(IShellItemRenderer value)
+		{
+			var oldRenderer = _currentShellItemRenderer;
+			var newRenderer = value;
 
-		void UpdateFlowDirection(bool readdViews = false) => throw new NotImplementedException();
+			_currentShellItemRenderer = value;
 
-		void SetupCurrentShellItem() => throw new NotImplementedException();
+			AddChildViewController(newRenderer.ViewController);
+			View.AddSubview(newRenderer.ViewController.View);
+			//View.SendSubviewToBack(newRenderer.ViewController.View);
+
+			newRenderer.ViewController.View.Frame = View.Bounds;
+
+			if (oldRenderer != null)
+			{
+				var transition = CreateShellItemTransition();
+				await transition.Transition(oldRenderer, newRenderer);
+
+				oldRenderer.ViewController.RemoveFromParentViewController();
+				oldRenderer.ViewController.View.RemoveFromSuperview();
+				oldRenderer.Dispose();
+			}
+		}
+
+		protected virtual void UpdateBackgroundColor()
+		{
+			var color = Shell.BackgroundColor;
+			if (color.IsDefault)
+				color = NSColor.WindowBackground.ToColor();
+
+			//FlyoutRenderer.View.BackgroundColor
+		}
+
+		void UpdateFlowDirection(bool readdViews = false)
+		{
+			if (_currentShellItemRenderer?.ViewController == null)
+				return;
+
+			_currentShellItemRenderer.ViewController.View.UpdateFlowDirection(Element);
+			View.UpdateFlowDirection(Element);
+
+			if (readdViews)
+			{
+				_currentShellItemRenderer.ViewController.View.RemoveFromSuperview();
+				View.AddSubview(_currentShellItemRenderer.ViewController.View);
+				//View.SendSubviewToBack(_currentShellItemRenderer.ViewController.View);
+			}
+		}
+
+		void SetupCurrentShellItem()
+		{
+			if (Shell.CurrentItem == null)
+			{
+				throw new InvalidOperationException("Shell CurrentItem should not be null");
+			}
+			else if (_currentShellItemRenderer == null)
+			{
+				OnCurrentItemChanged();
+			}
+		}
 
 		#region IShellContext
 
-		bool IShellContext.AllowFlyoutGesture => throw new NotImplementedException();
+		bool IShellContext.AllowFlyoutGesture
+		{
+			get
+			{
+				ShellSection shellSection = Shell?.CurrentItem?.CurrentItem;
+				if (shellSection == null)
+					return true;
+				return shellSection.Stack.Count <= 1;
+			}
+		}
 
-		Shell IShellContext.Shell => throw new NotImplementedException();
+		Shell IShellContext.Shell => Element as Shell;
 
-		IShellItemRenderer IShellContext.CurrentShellItemRenderer => null;
+		IShellItemRenderer IShellContext.CurrentShellItemRenderer => _currentShellItemRenderer;
 
-		IShellNavBarAppearanceTracker IShellContext.CreateNavBarAppearanceTracker() => throw new NotImplementedException();
+		IShellNavBarAppearanceTracker IShellContext.CreateNavBarAppearanceTracker()
+		{
+			return CreateNavBarAppearanceTracker();
+		}
 
-		IShellPageRendererTracker IShellContext.CreatePageRendererTracker() => throw new NotImplementedException();
+		IShellPageRendererTracker IShellContext.CreatePageRendererTracker()
+		{
+			return CreatePageRendererTracker();
+		}
 
-		IShellFlyoutContentRenderer IShellContext.CreateShellFlyoutContentRenderer() => throw new NotImplementedException();
+		IShellFlyoutContentRenderer IShellContext.CreateShellFlyoutContentRenderer()
+		{
+			return CreateShellFlyoutContentRenderer();
+		}
 
-		IShellSearchResultsRenderer IShellContext.CreateShellSearchResultsRenderer() => throw new NotImplementedException();
+		IShellSearchResultsRenderer IShellContext.CreateShellSearchResultsRenderer()
+		{
+			return CreateShellSearchResultsRenderer();
+		}
 
-		IShellSectionRenderer IShellContext.CreateShellSectionRenderer(ShellSection shellSection) => throw new NotImplementedException();
+		IShellSectionRenderer IShellContext.CreateShellSectionRenderer(ShellSection shellSection)
+		{
+			return CreateShellSectionRenderer(shellSection);
+		}
 
-		IShellTabBarAppearanceTracker IShellContext.CreateTabBarAppearanceTracker() => throw new NotImplementedException();
+		IShellTabBarAppearanceTracker IShellContext.CreateTabBarAppearanceTracker()
+		{
+			return CreateTabBarAppearanceTracker();
+		}
 
 		#endregion IShellContext
 
 		#region IVisualElementRenderer
 
-		VisualElement IVisualElementRenderer.Element => throw new NotImplementedException();
+		public VisualElement /*IVisualElementRenderer.*/Element { get; private set; }
 
-		NSView IVisualElementRenderer.NativeView => throw new NotImplementedException();
+		NSView IVisualElementRenderer.NativeView => FlyoutRenderer.View;
 
-		NSViewController IVisualElementRenderer.ViewController => throw new NotImplementedException();
+		NSViewController IVisualElementRenderer.ViewController => FlyoutRenderer.ViewController;
 
-		event EventHandler<VisualElementChangedEventArgs> IVisualElementRenderer.ElementChanged
-		{
-			add
-			{
-				throw new NotImplementedException();
-			}
+		public event EventHandler<VisualElementChangedEventArgs> /*IVisualElementRenderer.*/ElementChanged;
 
-			remove
-			{
-				throw new NotImplementedException();
-			}
-		}
-
-		SizeRequest IVisualElementRenderer.GetDesiredSize(double widthConstraint, double heightConstraint)
-		{
-			throw new NotImplementedException();
-		}
+		SizeRequest IVisualElementRenderer.GetDesiredSize(double widthConstraint, double heightConstraint) => new SizeRequest(new Size(100, 100));
 
 		void IVisualElementRenderer.SetElement(VisualElement element)
 		{
-			throw new NotImplementedException();
+			if (Element != null)
+				throw new NotSupportedException("Reuse of the Shell Renderer is not supported");
+			Element = element;
+			OnElementSet(Element as Shell);
+
+			ElementChanged?.Invoke(this, new VisualElementChangedEventArgs(null, Element));
 		}
 
 		void IVisualElementRenderer.SetElementSize(Size size)
 		{
-			throw new NotImplementedException();
+			Element.Layout(new Rectangle(Element.X, Element.Y, size.Width, size.Height));
 		}
 
 		#endregion IVisualElementRenderer
